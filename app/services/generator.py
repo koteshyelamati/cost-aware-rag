@@ -54,11 +54,11 @@ async def generate(
     prompt = f"{context}\n\nQuestion: {query}"
 
     response = await asyncio.to_thread(_call_gemini, model_name, prompt)
-    answer = response.text.strip()
+    answer = (response.text or "").strip()
 
     usage = response.usage_metadata
-    tokens_in: int = usage.prompt_token_count if usage else 0
-    tokens_out: int = usage.candidates_token_count if usage else 0
+    tokens_in: int = (usage.prompt_token_count or 0) if usage else 0
+    tokens_out: int = (usage.candidates_token_count or 0) if usage else 0
 
     cited = _extract_cited_ids(answer, len(chunks))
 

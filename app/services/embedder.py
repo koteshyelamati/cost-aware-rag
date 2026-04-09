@@ -55,7 +55,7 @@ class Embedder:
     def _call_api(self, batch: list[str]) -> list[list[float]]:
         result = self._client.models.embed_content(
             model=_EMBED_MODEL,
-            contents=batch,
+            contents=batch,  # type: ignore[arg-type]
             config=types.EmbedContentConfig(output_dimensionality=_EMBED_DIMS),
         )
-        return [e.values for e in result.embeddings]
+        return [list(e.values) for e in (result.embeddings or []) if e.values is not None]

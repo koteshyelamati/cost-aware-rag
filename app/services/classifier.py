@@ -1,4 +1,5 @@
 import re
+from typing import Literal, cast
 
 import tiktoken
 
@@ -47,7 +48,7 @@ def classify(query: str) -> ComplexityResult:
         signals.append("multi_part_question")
 
     score = min(score, 1.0)
-    tier = "complex" if score >= cfg.COMPLEXITY_THRESHOLD else "simple"
+    tier = cast(Literal["simple", "complex"], "complex" if score >= cfg.COMPLEXITY_THRESHOLD else "simple")
 
     logger.info(
         "query classified",

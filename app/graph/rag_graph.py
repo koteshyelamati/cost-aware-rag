@@ -1,4 +1,4 @@
-from typing import TypedDict
+from typing import Any, TypedDict
 
 from langgraph.graph import StateGraph, END
 
@@ -67,7 +67,7 @@ async def generate_node(state: RAGState) -> RAGState:
     return {**state, "answer": gen_response.answer, "cost_metadata": cost_meta}
 
 
-def build_graph(db, collection_name: str) -> "CompiledGraph":
+def build_graph(db, collection_name: str) -> Any:
     """Compile the RAG StateGraph with injected Motor db handle."""
 
     async def _retrieve(state: RAGState) -> RAGState:

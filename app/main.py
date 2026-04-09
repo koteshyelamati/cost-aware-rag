@@ -15,7 +15,7 @@ logger = get_logger(__name__)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    motor_client = AsyncIOMotorClient(cfg.MONGODB_URI)
+    motor_client: AsyncIOMotorClient = AsyncIOMotorClient(cfg.MONGODB_URI)
     await motor_client.admin.command({"ping": 1})
     app.state.db = motor_client[cfg.DB_NAME]
     logger.info("mongodb connected", extra={"db": cfg.DB_NAME})

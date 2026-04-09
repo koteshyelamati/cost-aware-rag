@@ -69,6 +69,8 @@ async def query(
     latency_ms = (time.perf_counter() - start) * 1000
 
     raw_meta = final_state["cost_metadata"]
+    if raw_meta is None:
+        raise RuntimeError("generate node did not populate cost_metadata")
     cost_meta = CostMetadata(
         model_used=raw_meta.model_used,
         tokens_in=raw_meta.tokens_in,

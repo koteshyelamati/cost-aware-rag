@@ -1,4 +1,4 @@
-from fastapi import Depends, Header, HTTPException, Request
+from fastapi import Header, HTTPException, Request
 
 from app.config import cfg
 

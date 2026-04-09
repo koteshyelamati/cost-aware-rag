@@ -35,7 +35,7 @@ class SemanticCache:
         best_key: bytes | None = None
 
         for key in keys:
-            raw = await self._r.hget(key, "embedding")
+            raw = await self._r.hget(key, "embedding")  # type: ignore[misc]
             if raw is None:
                 continue
             stored_embedding: list[float] = json.loads(raw)
@@ -47,7 +47,7 @@ class SemanticCache:
         if best_score < cfg.CACHE_SIMILARITY_THRESHOLD or best_key is None:
             return None
 
-        fields = await self._r.hgetall(best_key)
+        fields = await self._r.hgetall(best_key.decode())  # type: ignore[misc]
         logger.info(
             "semantic cache hit",
             extra={"score": round(best_score, 4), "key": best_key.decode()},
@@ -71,6 +71,6 @@ class SemanticCache:
             "embedding": json.dumps(query_embedding),
             "created_at": datetime.now(timezone.utc).isoformat(),
         }
-        await self._r.hset(key, mapping=payload)
-        await self._r.expire(key, cfg.CACHE_TTL)
+        await self._r.hset(key, mapping=payload)  # type: ignore[misc]
+        await self._r.expire(key, cfg.CACHE_TTL)  # type: ignore[misc]
         logger.info("semantic cache set", extra={"key": key, "ttl": cfg.CACHE_TTL})
